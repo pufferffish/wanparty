@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.Base64;
 import java.util.UUID;
 
-public class TunnelAddress extends SocketAddress {
+public class TunnelAddress {
     public final UUID id;
     public final String name;
     public final String hostname;
