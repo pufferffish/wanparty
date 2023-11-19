@@ -5,7 +5,8 @@
 	"client": [
 		"OpenToLanScreenMixin",
 		"IntegratedServerMixin",
-		"AllowedAddressResolverMixin"
+		"AllowedAddressResolverMixin",
+		"ServerLoginNetworkHandlerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
