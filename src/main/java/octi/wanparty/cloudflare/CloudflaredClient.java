@@ -13,6 +13,7 @@ import org.capnproto.MessageBuilder;
 import org.capnproto.Text;
 import org.capnproto.TextList;
 import org.capnproto.TwoPartyClient;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -62,8 +63,17 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
     }
 
     @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        this.executor.shutdownNow();
+    public void channelInactive(@NotNull ChannelHandlerContext ctx) throws Exception {
+        HttpDataFrame dataFrame = new HttpDataFrame();
+        dataFrame.endStream = true;
+        dataFrame.streamID = this.controlStreamID;
+        dataFrame.payload = Unpooled.EMPTY_BUFFER;
+        ctx.channel().writeAndFlush(dataFrame);
+        ctx.close();
+        for (Socket socket : this.proxyMap.values()) {
+            socket.close();
+        }
+        this.controlStreamID = -1;
     }
 
     @Override
@@ -299,12 +309,6 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
 
     @Override
     public void close() {
-        HttpDataFrame dataFrame = new HttpDataFrame();
-        dataFrame.endStream = true;
-        dataFrame.streamID = this.controlStreamID;
-        dataFrame.payload = Unpooled.EMPTY_BUFFER;
-        ctx.channel().writeAndFlush(dataFrame);
-        this.controlStreamID = -1;
     }
 
     private static class ReadRequest {

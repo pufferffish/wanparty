@@ -65,9 +65,6 @@ public class Cloudflared implements Closeable {
         if (this.client != null) {
             this.client.close();
         }
-        if (this.bootstrap != null) {
-            this.bootstrap.clone();
-        }
         if (this.workerGroup != null) {
             this.workerGroup.shutdownGracefully();
         }

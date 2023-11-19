@@ -147,6 +147,11 @@ public class ProxyClientThread implements Runnable {
                 os.write(buf, 0, bytesRead);
             }
         } catch (IOException ex) {
+            try {
+                from.close();
+                to.close();
+            } catch (IOException ignored) {
+            }
             ex.printStackTrace();
         }
     }
