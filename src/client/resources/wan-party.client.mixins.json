@@ -3,7 +3,8 @@
 	"package": "octi.wanparty.mixin.client",
 	"compatibilityLevel": "JAVA_17",
 	"client": [
-		"ExampleClientMixin"
+		"OpenToLanScreenMixin",
+		"IntegratedServerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
