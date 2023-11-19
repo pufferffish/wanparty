@@ -20,7 +20,7 @@ public class Http2Handler extends SimpleChannelInboundHandler<HttpFrame> {
             response.settings = Collections.emptyMap();
             ctx.channel().writeAndFlush(response);
         }
-        System.err.println("Recv: " + msg);
+        // System.err.println("Recv: " + msg);
         if (msg instanceof HttpSettingsFrame) {
             HttpSettingsFrame settingsFrame = (HttpSettingsFrame) msg;
             if (settingsFrame.ack)

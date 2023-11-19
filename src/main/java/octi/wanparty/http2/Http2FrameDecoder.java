@@ -38,7 +38,7 @@ public class Http2FrameDecoder extends SimpleChannelInboundHandler<ByteBuf> {
         RawHttpFrame msg = new RawHttpFrame(buf.readByte(), buf.readByte(), buf.readInt() & 0x7FFFFFFF, buf.readBytes(buf.readableBytes()));
 
         if (!FRAME_TYPES.containsKey(msg.type)) {
-            System.err.println("Unknown frame: " + msg);
+            // System.err.println("Unknown frame: " + msg);
             return;
         }
 

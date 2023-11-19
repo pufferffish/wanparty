@@ -24,7 +24,7 @@ public class Http2FrameEncoder extends MessageToByteEncoder<HttpFrame> {
             out.writeByte(frame.flags);
             out.writeInt(frame.streamID);
             out.writeBytes(frame.payload);
-            System.err.println("Sent: " + msg);
+            // System.err.println("Sent: " + msg);
         } catch (Exception ex) {
             ex.printStackTrace();
             throw ex;

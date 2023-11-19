@@ -17,6 +17,7 @@ import org.capnproto.Text;
 import org.capnproto.TextList;
 import org.capnproto.TwoPartyClient;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -82,19 +83,36 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
                 ctx.channel().writeAndFlush(response);
                 this.setupControlStream();
             } else if ("websocket".equals(connectionType) && !headerFrame.endStream) {
+                System.out.println("Accepting connection");
                 final String websocketKey = headerFrame.headers.get("sec-websocket-key");
                 if (websocketKey == null) {
                     this.respondInvalidRequest(ctx, headerFrame.streamID);
                     return;
                 }
-                try (Socket socket = new Socket()) {
-                    socket.connect(new InetSocketAddress("127.0.0.1", this.proxyPort));
-                    this.proxyMap.put(headerFrame.streamID, socket);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    this.respondInvalidRequest(ctx, headerFrame.streamID);
-                    return;
-                }
+                Socket socket = new Socket();
+                socket.setTcpNoDelay(true);
+                socket.setReceiveBufferSize(65536);
+                socket.connect(new InetSocketAddress("127.0.0.1", this.proxyPort));
+                this.proxyMap.put(headerFrame.streamID, socket);
+                new Thread(() -> {
+                    try {
+                        byte[] buffer = new byte[2048];
+                        while (!socket.isClosed()) {
+                            int read = socket.getInputStream().read(buffer);
+                            if (read < 0)
+                                break;
+                            if (read == 0)
+                                continue;
+                            HttpDataFrame dataFrame = new HttpDataFrame();
+                            dataFrame.endStream = false;
+                            dataFrame.streamID = headerFrame.streamID;
+                            dataFrame.payload = Unpooled.wrappedBuffer(buffer, 0, read);
+                            ctx.channel().writeAndFlush(dataFrame);
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }, "Proxy conncetion").start();
 
                 Map<String, String> headers = new LinkedHashMap<>();
                 headers.put("Connection", "Upgrade");
@@ -125,7 +143,9 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
                 return;
             }
             Socket socket = this.proxyMap.get(dataFrame.streamID);
-            socket.getOutputStream().write(dataFrame.payload.array());
+            byte[] payload = new byte[dataFrame.payload.readableBytes()];
+            dataFrame.payload.readBytes(payload);
+            socket.getOutputStream().write(payload);
             if (dataFrame.endStream) {
                 this.proxyMap.remove(dataFrame.streamID).close();
             }
