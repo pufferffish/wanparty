@@ -3,13 +3,13 @@
 	"id": "wan-party",
 	"version": "${version}",
 	"name": "WAN-Party",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Share your LAN server to the public internet with ease!",
 	"authors": [
-		"Me!"
+		"octi"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/wan-party",
+		"sources": ""
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/wan-party/icon.png",
