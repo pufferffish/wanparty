@@ -160,6 +160,11 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
             HttpResetStreamFrame resetStreamFrame = (HttpResetStreamFrame) msg;
             if (resetStreamFrame.streamID == this.controlStreamID) {
                 ctx.channel().close();
+            } else {
+                Socket socket = this.proxyMap.remove(resetStreamFrame.streamID);
+                if (socket != null) {
+                    socket.close();
+                }
             }
         }
     }
