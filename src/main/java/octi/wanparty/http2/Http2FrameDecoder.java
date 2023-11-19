@@ -25,6 +25,7 @@ public class Http2FrameDecoder extends SimpleChannelInboundHandler<ByteBuf> {
         frameTypes.put(HttpFrame.DATA, HttpDataFrame.class);
         frameTypes.put(HttpFrame.GO_AWAY, HttpGoAwayFrame.class);
         frameTypes.put(HttpFrame.RST_STREAM, HttpResetStreamFrame.class);
+        frameTypes.put(HttpFrame.WINDOW_UPDATE, HttpWindowUpdateFrame.class);
         FRAME_TYPES = Collections.unmodifiableMap(frameTypes);
     }
 
@@ -44,6 +45,12 @@ public class Http2FrameDecoder extends SimpleChannelInboundHandler<ByteBuf> {
 
         HttpFrame httpFrame = FRAME_TYPES.get(msg.type).newInstance();
         httpFrame.readFromRawFrame(ctx, msg);
+
+        if (httpFrame instanceof HttpDataFrame dataFrame) {
+            ctx.channel().writeAndFlush(new HttpWindowUpdateFrame(0, dataFrame.payload.readableBytes()));
+            ctx.channel().writeAndFlush(new HttpWindowUpdateFrame(dataFrame.streamID, dataFrame.payload.readableBytes()));
+        }
+
         ctx.fireChannelRead(httpFrame);
     }
 }

@@ -17,7 +17,7 @@ public class Http2Handler extends SimpleChannelInboundHandler<HttpFrame> {
         if (firstMessage) {
             firstMessage = false;
             HttpSettingsFrame response = new HttpSettingsFrame();
-            response.settings = Collections.emptyMap();
+            response.settings = Collections.singletonMap(HttpSettingsFrame.Settings.SETTINGS_INITIAL_WINDOW_SIZE, Integer.MAX_VALUE);
             ctx.channel().writeAndFlush(response);
         }
         // System.err.println("Recv: " + msg);
