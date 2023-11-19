@@ -96,8 +96,8 @@ public class CloudflaredClient extends SimpleChannelInboundHandler<HttpFrame> im
                 this.proxyMap.put(headerFrame.streamID, socket);
                 new Thread(() -> {
                     try {
-                        byte[] buffer = new byte[2048];
                         while (!socket.isClosed()) {
+                            byte[] buffer = new byte[2048];
                             int read = socket.getInputStream().read(buffer);
                             if (read < 0)
                                 break;
