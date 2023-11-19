@@ -44,6 +44,7 @@ dependencies {
 	implementation "org.capnproto:runtime-rpc:0.1.16-SNAPSHOT"
 	implementation "com.twitter:hpack:1.0.2"
 	modApi include("org.capnproto:runtime-rpc:0.1.16-SNAPSHOT")
+	modApi include("org.capnproto:runtime:0.1.16-SNAPSHOT")
 	modApi include("com.twitter:hpack:1.0.2")
 	
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
@@ -68,8 +69,6 @@ java {
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 	// if it is present.
 	// If you remove this line, sources will not be generated.
-	withSourcesJar()
-
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
 }
