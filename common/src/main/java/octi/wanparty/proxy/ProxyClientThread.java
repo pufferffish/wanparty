@@ -166,7 +166,11 @@ public class ProxyClientThread implements Runnable {
             int serverAddressLength = readVarInt(baos);
             byte[] serverAddressBytes = new byte[serverAddressLength];
             baos.read(serverAddressBytes);
-            return new String(serverAddressBytes);
+
+            int i;
+            for (i = 0; i < serverAddressBytes.length && serverAddressBytes[i] != 0; i++) { }
+
+            return new String(serverAddressBytes, 0, i, StandardCharsets.UTF_8);
         }
     }
 

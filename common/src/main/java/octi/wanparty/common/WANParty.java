@@ -29,7 +29,7 @@ public enum WANParty {
     public static void initClient() {
         logVersion();
         try {
-            ServerSocket serverSocket = new ServerSocket(0, 0, InetAddress.getByName(null));
+            ServerSocket serverSocket = new ServerSocket(0, 0, InetAddress.getByName("127.0.0.1"));
             proxyPort = serverSocket.getLocalPort();
             LOGGER.info("Proxy started on port: " + proxyPort);
             new Thread(new ProxyThread(serverSocket), "WAN Party Proxy").start();

@@ -287,9 +287,6 @@ subprojects { p ->
         relocate "org.capnproto", "${librariesLocation}.capnproto"
         relocate "com.twitter", "${librariesLocation}.twitter"
 
-        // Netty
-        relocate "io.netty", "${librariesLocation}.netty"
-
         mergeServiceFiles()
     }
     // Using jar.finalizedBy(shadowJar) causes issues so we do this scuffed bypass
