@@ -187,7 +187,7 @@ subprojects { p ->
     // (This will point to a non-existent class in all sub-projects except "Core")
     if (p == project(":core")) {
         application {
-            mainClass.set("octi.wanparty.core.jar.JarMain")
+            mainClass.set("octi.wanparty.standalone.Main")
         }
     }
 
@@ -212,6 +212,10 @@ subprojects { p ->
         implementation("org.junit.jupiter:junit-jupiter:5.8.2")
         implementation("org.junit.jupiter:junit-jupiter-engine:5.8.2")
         implementation("junit:junit:4.13")
+
+        // NightConfig (includes Toml & Json)
+        forgeShadowMe("com.electronwill.night-config:toml:${rootProject.nightconfig_version}")
+        forgeShadowMe("com.electronwill.night-config:json:${rootProject.nightconfig_version}")
 
         // Netty
         // Breaks 1.16.5
@@ -272,6 +276,9 @@ subprojects { p ->
             }
         }
         def librariesLocation = "wanparty.libraries"
+
+        // NightConfig (includes Toml & Json)
+        relocate "com.electronwill.nightconfig", "${librariesLocation}.electronwill.nightconfig"
 
         // Netty
         relocate "io.netty", "${librariesLocation}.netty"
@@ -385,7 +392,7 @@ subprojects { p ->
         manifest {
             attributes 'Implementation-Title': rootProject.mod_name,
                     'Implementation-Version': rootProject.mod_version,
-                    'Main-Class': 'octi.wanparty.core.jar.JarMain' // When changing the main of the jar change this line
+                    'Main-Class': 'octi.wanparty.standalone.Main' // When changing the main of the jar change this line
         }
     }
 

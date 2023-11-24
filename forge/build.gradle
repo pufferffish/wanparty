@@ -40,13 +40,6 @@ remapJar {
     classifier null
 }
 
-
-def addMod(path, enabled) {
-    if (enabled == "2")
-        dependencies { implementation(path) }
-    else if (enabled == "1")
-        dependencies { modCompileOnly(path) }
-}
 dependencies {
     minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
     mappings loom.layered() {
