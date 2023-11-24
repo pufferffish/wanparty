@@ -19,24 +19,13 @@
 
 package octi.wanparty.forge;
 
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import octi.wanparty.common.ModJarInfo;
 import octi.wanparty.common.WANParty;
-import org.apache.logging.log4j.Logger;
-import java.lang.invoke.MethodHandles;
 
-/**
- * Initialize and setup the Mod. <br>
- * If you are looking for the real start of the mod
- * check out the ClientProxy.
- *
- * @author coolGi
- * @author Ran
- * @author James Seibel
- * @version 8-15-2022
- */
 @Mod(WANParty.MOD_ID)
 public class ForgeMain {
     public ForgeMain() {
@@ -49,7 +38,11 @@ public class ForgeMain {
     }
 
     private void initDedicated(final FMLDedicatedServerSetupEvent event) {
-        System.out.println("server lol");
+        MinecraftForge.EVENT_BUS.addListener(this::onServerStartup);
+    }
+
+    public void onServerStartup(ServerStartedEvent event) {
+        WANParty.initServer(event.getServer().getPort());
     }
 
 }

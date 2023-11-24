@@ -31,7 +31,7 @@ public enum WANParty {
         try {
             ServerSocket serverSocket = new ServerSocket(0, 0, InetAddress.getByName(null));
             proxyPort = serverSocket.getLocalPort();
-            System.out.println("Proxy started on port: " + proxyPort);
+            LOGGER.info("Proxy started on port: " + proxyPort);
             new Thread(new ProxyThread(serverSocket), "WAN Party Proxy").start();
         } catch (IOException ex) {
             throw new RuntimeException(ex);

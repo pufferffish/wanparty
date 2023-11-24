@@ -5,6 +5,9 @@
   "mixins": [
   ],
   "client": [
+    "client.IntegratedServerMixin",
+    "client.ServerNameResolverMixin",
+    "client.ShareToLanScreenMixin"
   ],
   "server": [
   ]
