@@ -39,7 +39,7 @@ public class Cloudflared implements Closeable {
         this.bootstrap = new Bootstrap()
             .group(workerGroup)
             .channelFactory(() -> this.socketChannel)
-            .handler(new ChannelInitializer<>() {
+            .handler(new ChannelInitializer<Channel>() {
                 @Override
                 public void initChannel(Channel ch) throws Exception {
                     SslContext sslContext = SslContextBuilder.forClient().trustManager(CloudflareCA.ROOT_CAs).build();

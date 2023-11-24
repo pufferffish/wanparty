@@ -16,7 +16,7 @@ public class FabricDedicatedServerMain implements DedicatedServerModInitializer 
 
     @Override
     public void onInitializeServer() {
-        ServerLifecycleEvents.SERVER_STARTING.register((server) -> {
+        ServerLifecycleEvents.SERVER_STARTED.register((server) -> {
             if (this.hasPostSetupDone) {
                 return;
             }
