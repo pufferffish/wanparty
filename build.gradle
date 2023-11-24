@@ -216,6 +216,9 @@ subprojects { p ->
         // NightConfig (includes Toml & Json)
         forgeShadowMe("com.electronwill.night-config:toml:${rootProject.nightconfig_version}")
         forgeShadowMe("com.electronwill.night-config:json:${rootProject.nightconfig_version}")
+        forgeShadowMe("org.capnproto:runtime-rpc:${rootProject.capnproto_version}")
+        forgeShadowMe("org.capnproto:runtime:${rootProject.capnproto_version}")
+        forgeShadowMe("com.twitter:hpack:${rootProject.hpack_version}")
 
         // Netty
         // Breaks 1.16.5
@@ -279,6 +282,10 @@ subprojects { p ->
 
         // NightConfig (includes Toml & Json)
         relocate "com.electronwill.nightconfig", "${librariesLocation}.electronwill.nightconfig"
+
+        // Capnproto and hpack
+        relocate "org.capnproto", "${librariesLocation}.capnproto"
+        relocate "com.twitter", "${librariesLocation}.twitter"
 
         // Netty
         relocate "io.netty", "${librariesLocation}.netty"
@@ -481,8 +488,14 @@ allprojects { p ->
         // Required for Mixins & VanillaGradle
         maven { url "https://repo.spongepowered.org/maven/" }
 
-        // Required for Canvas (mod)
-        maven { url "https://maven.vram.io/" }
+        maven {
+            name = "github"
+            url = "https://maven.pkg.github.com/pufferffish/capnproto-java-rpc/"
+            credentials { // you need a github token with read:packages scope
+                username = System.getenv("GITHUB_ACTOR") ?: "$github_user"
+                password = System.getenv("GITHUB_TOKEN") ?: "$github_token"
+            }
+        }
 
         // These 3 are for importing mods that arnt on CursedForge, Modrinth, GitHub, GitLab or anywhere opensource
         flatDir {
