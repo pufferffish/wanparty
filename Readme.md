@@ -1,4 +1,4 @@
-# WAN Party (for Fabric)
+# WAN Party (for Fabric and Forge)
 
 WAN Party is a free and open-source optimization mod for sharing your LAN world server / normal server without network configuration.
 ### Installation
