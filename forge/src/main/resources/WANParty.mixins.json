@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "octi.wanparty.forge.mixins",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "server": [
+  ]
+}

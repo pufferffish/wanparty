@@ -1,0 +1,44 @@
+{
+    "schemaVersion": 1,
+    "id": "wanparty",
+    "version": "${version}",
+
+    "name": "${mod_name}",
+    "description": "${description}",
+    "authors": $authors,
+    
+    "contact": {
+        "homepage": "${homepage}",
+        "sources": "${source}",
+        "issues": "${issues}"
+    },
+    
+    "license": "GPL-3",
+    "icon": "icon.png",
+
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "octi.wanparty.fabric.FabricClientMain"
+        ],
+        "server": [
+            "octi.wanparty.fabric.FabricDedicatedServerMain"
+        ]
+    },
+    
+    "mixins": [
+        "WANParty.fabric.mixins.json"
+    ],
+    
+    "depends": {
+        "fabricloader": "*",
+        "fabric-api-base": "*",
+        "fabric-lifecycle-events-v1": "*",
+        "fabric-resource-loader-v0": "*",
+        "minecraft": $compatible_minecraft_versions,
+        "java": ">=${java_version}"
+    },
+
+    "breaks": $fabric_incompatibility_list,
+    "recommends": $fabric_recommend_list
+}

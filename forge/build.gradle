@@ -1,0 +1,92 @@
+plugins {
+    id "architectury-plugin" version "3.4-SNAPSHOT"
+}
+
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
+
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
+
+loom {
+    forge {
+        mixinConfigs = [
+                "WANParty.mixins.json"
+        ]
+    }
+
+    // "runs" isn't required, but when we do need it then it can be useful
+    runs {
+        client {
+            client()
+            setConfigName("Forge Client")
+            ideConfigGenerated(true)
+            runDir("../run")
+            vmArgs("-XX:-OmitStackTraceInFastThrow", minecraftMemoryJavaArg)
+        }
+        server {
+            server()
+            setConfigName("Forge Server")
+            ideConfigGenerated(true)
+            runDir("../run")
+        }
+    }
+}
+
+remapJar {
+    inputFile = shadowJar.archiveFile
+    dependsOn shadowJar
+    classifier null
+}
+
+
+def addMod(path, enabled) {
+    if (enabled == "2")
+        dependencies { implementation(path) }
+    else if (enabled == "1")
+        dependencies { modCompileOnly(path) }
+}
+dependencies {
+    minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+    mappings loom.layered() {
+        // Mojmap mappings
+        officialMojangMappings()
+        // Parchment mappings (it adds parameter mappings & javadoc)
+        parchment("org.parchmentmc.data:parchment-${rootProject.parchment_version}@zip")
+    }
+
+    // Forge
+    forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
+}
+
+task deleteResources(type: Delete) {
+    delete file("build/resources/main")
+}
+
+tasks.register('copyAllResources') {
+    dependsOn(copyCoreResources)
+    dependsOn(copyCommonLoaderResources)
+}
+
+processResources {
+    dependsOn(tasks.named('copyAllResources'))
+}
+
+tasks.named('runClient') {
+    dependsOn(tasks.named('copyAllResources'))
+    finalizedBy(deleteResources)
+}
+
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
+}
+
+//components.java {
+//    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+//        skip()
+//    }
+//}
