@@ -14,7 +14,7 @@ publish_version()
 
 if [ -z "$1" ]
 then
-    echo "Build target is undefined! [all] [1.20.1] [1.19.4] [1.19.2] [1.18.2] [1.17.1] [1.16.5]"
+    echo "Build target is undefined! [all] [1.20.4] [1.20.1] [1.19.4] [1.19.2] [1.18.2] [1.17.1] [1.16.5]"
     exit 1
 fi
 
@@ -23,6 +23,7 @@ docker build --tag=dh-eclipse-temurin -q .
 mkdir -p buildAllJars/fabric
 mkdir -p buildAllJars/forge
 mkdir -p buildAllJars/merged
+publish_version 1.20.4 $1
 publish_version 1.20.1 $1
 publish_version 1.19.4 $1
 publish_version 1.19.2 $1
